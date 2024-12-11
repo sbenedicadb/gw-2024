@@ -1,0 +1,34 @@
+# This is a basic workflow that is manually triggered
+
+name: Post to X
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:  
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      message:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Message'
+        # Default value if no value is explicitly provided
+        default: 'test from gha'
+        # Input has to be provided for the workflow to run
+        required: true
+        # The data type of the input
+        type: string
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: nearform-actions/github-action-notify-twitter@v1.2.2
+        with:
+          message: ${{ github.event.inputs.message }} #|
+            # ${{ github.event.repository.name }} ${{ github.event.release.tag_name }} has been released. Check out the release notes: ${{ github.event.release.html_url }}
+          twitter-app-key: ${{ secrets.TWITTER_API_KEY }}
+          twitter-app-secret: ${{ secrets.TWITTER_API_SECRET_KEY }}
+          twitter-access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          twitter-access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+          
